@@ -29,7 +29,7 @@ class Cell extends React.Component{
     }
 
     return (
-			<div onClick={this.handleClick} style={cellStyle}>{this.props.col}</div>
+			<div onClick={this.handleClick} style={cellStyle}>{(this.props.col === 0 ? this.props.row : this.props.col)}</div>
 		);
   }
 }
