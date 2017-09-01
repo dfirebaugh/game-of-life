@@ -20,8 +20,8 @@ class Cell extends React.Component{
   }
   render(){
     var cellStyle = {
-      width: 24,
-			height: 24,
+      width: 12,
+			height: 12,
 			dislay: "inline-block",
 			float: "left",
 			border: "1px solid #000",
@@ -29,7 +29,7 @@ class Cell extends React.Component{
     }
 
     return (
-			<div onClick={this.handleClick} style={cellStyle}>{(this.props.col === 0 ? this.props.row : this.props.col)}</div>
+			<div onClick={this.handleClick} style={cellStyle}></div>
 		);
   }
 }
