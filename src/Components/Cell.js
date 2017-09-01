@@ -1,9 +1,8 @@
 import React from 'react';
 
-
 class Cell extends React.Component{
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {isAlive:null}
 
     this.handleClick = this.handleClick.bind(this)
@@ -15,8 +14,8 @@ class Cell extends React.Component{
     this.setState({isAlive:nextProps.isAlive});
   }
   handleClick(){
-    // Grid.updateCellState(this.props.row,this.props.col);
     this.setState({isAlive:!this.state.isAlive});
+    this.props.parentMethod(this.props.row, this.props.col);
   }
   render(){
     var cellStyle = {

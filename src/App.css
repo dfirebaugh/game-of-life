@@ -24,7 +24,7 @@
 }
 
 .btn {
-  width:5%;
+  width:90%;
   margin:0 auto;
   background: #d16b6b;
   background-image: -webkit-linear-gradient(top, #d16b6b, #a34b4b);
@@ -34,7 +34,7 @@
   background-image: linear-gradient(to bottom, #d16b6b, #a34b4b);
   font-family: Arial;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 95%;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
 }
@@ -48,7 +48,15 @@
   background-image: linear-gradient(to bottom, #ffd9d9, #b58080);
   text-decoration: none;
 }
+body{
+  -webkit-user-select: none; /* Chrome/Safari */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+ */
 
+/* Rules below not implemented in browsers yet */
+-o-user-select: none;
+user-select: none;
+}
 
 /*#grid{
   width: 40%;
@@ -61,4 +69,26 @@
 }
 .rowStyle {
   display:contents;
+}
+.btnContainer{
+  width:30%;
+  margin:0 auto;
+  display:flex;
+}
+.inforContainer{
+  width:30%;
+  height:35px;
+  margin:0 auto;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+
+  align-items: center;
+}
+.inforContainer *{
+  width:50%;
 }

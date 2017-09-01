@@ -1,6 +1,7 @@
 import React from 'react';
 import Cell from './Cell.js';
 import Generation from './Generation.js';
+import Buttons from './Buttons.js';
 
 class Grid  extends React.Component{
   constructor(){
@@ -11,6 +12,7 @@ class Grid  extends React.Component{
     this.generate = this.generate.bind(this)
     this.handleClickGen = this.handleClickGen.bind(this)
     this.handleClickPause = this.handleClickPause.bind(this)
+    this.handleCellClick = this.handleCellClick.bind(this)
   }
   componentWillMount(){
     function Cell() {
@@ -71,7 +73,6 @@ class Grid  extends React.Component{
     var gen = this.state.generation
     this.allCells();
     this.updateAllCells();
-    this.renderGrid();
     this.setState({generation: gen+1})
   }
   handleClickPause(){
@@ -84,7 +85,7 @@ class Grid  extends React.Component{
         this.generate()
       }
       }.bind(this),1)
-      
+
   }
   getNeighbors(row,col){
     //gets the total of alive neighbors for a cell
@@ -104,7 +105,7 @@ class Grid  extends React.Component{
     return cell.neighbors
   }
   allCells(){
-    //cycles through the grid and picks out cells that are alive
+    //cycles through the grid
     for(var v = 0;v<this.props.size;v++){
       for(var w = 0; w<this.props.size*2;w++){
         var cell = this.state.grid[v][w];
@@ -114,8 +115,13 @@ class Grid  extends React.Component{
     }
 
   renderGrid(){
-    //this changes the state so that the grid rerenders -- i'm looking for a better way to do this.
+    //this changes the state so that the grid rerenders
+
     if(this.state.toggle ? this.setState({toggle:true}) : this.setState({toggle:false}));
+  }
+  handleCellClick(row,col){
+    console.log("cellClicked: " + row + "," + col)
+    this.updateCellState(row,col);
   }
   render(){
 
@@ -142,20 +148,19 @@ class Grid  extends React.Component{
 			var row = [];
 			for (var j = 0; j < this.props.size*2; j++) {
 				var cell = this.state.grid[i][j];
-				row.push(<Cell key={i + "," + j} isAlive={cell.isAlive} row={i} col={j} />);
+				row.push(<Cell key={i + "," + j} isAlive={cell.isAlive} row={i} col={j} parentMethod={this.handleCellClick} />);
 			}
-			cells.push(<div key={i+","+j} style={rowStyle}>{row}</div>);
+			cells.push(<div  key={i+","+j} style={rowStyle}>{row}</div>);
 		}
 
 		return (
 			<div className="container text-center">
+      <Generation gen={this.state.generation}/>
+      <Buttons handleClickGen={this.handleClickGen} handleClickPause={this.handleClickPause} clear={this.clear} paused={this.state.paused}/>
+
 				<div style={gridStyle}>
 					{cells}
 				</div>
-        <div className='clearBtn btn' onClick={this.clear}>Clear</div>
-        <div id='generate' className='btn' onClick={this.handleClickGen}>Generate</div>
-        <div className='btn' onClick={this.handleClickPause}>{(this.state.paused ? "Play": "Pause")}</div>
-        <Generation gen={this.state.generation}/>
      </div>
 		);
 	}
