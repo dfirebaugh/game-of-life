@@ -40,8 +40,7 @@ class Grid  extends React.Component{
   }
   updateCellState(row,col){
     var cell = this.state.grid[row][col];
-    cell.isAlive = true;
-
+    (cell.isAlive ? cell.isAlive = false : cell.isAlive = true)
   }
   isWithinGrid(row, col) {
     return row >= 0 && row < this.props.size && col >= 0 && col < this.props.size*2;
@@ -139,6 +138,7 @@ class Grid  extends React.Component{
 			boxShadow: "0 0 5px rgba(0, 0, 0, 1)"
 		};
     var rowStyle = {
+      display:'flex',
       float:'left',
       clear:'both'
     };
