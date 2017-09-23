@@ -14,6 +14,9 @@ class Grid  extends React.Component{
     this.handleClickPause = this.handleClickPause.bind(this)
     this.handleCellClick = this.handleCellClick.bind(this)
   }
+  componentDidMount(){
+    this.handleClickPause();
+  }
   componentWillMount(){
     function Cell() {
 			this.isAlive = Math.random() > .53;
