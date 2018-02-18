@@ -1,10 +1,8 @@
 import React from 'react';
 
 class Cell extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {isAlive:null};
-
+  constructor(){
+    super();
     this.handleClick = this.handleClick.bind(this);
   }
   componentWillMount(){
@@ -20,11 +18,11 @@ class Cell extends React.Component{
   render(){
     var cellStyle = {
       width: 12,
-			height: 12,
-			dislay: "inline-block",
-			float: "left",
-			border: "1px solid #000",
-			background: this.state.isAlive ? "#FFF" : "#333"
+      height: 12,
+      dislay: "inline-block",
+      float: "left",
+      border: "1px solid #000",
+      background: this.state.isAlive ? "#FFF" : "#333"
     };
 
     return (
