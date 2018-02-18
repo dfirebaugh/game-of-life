@@ -14,7 +14,6 @@ class Grid extends React.Component {
     this.handleClear = this.handleClear.bind(this);
     this.handleClickGen = this.handleClickGen.bind(this);
     this.handleClickPause = this.handleClickPause.bind(this);
-    this.handleCellClick = this.handleCellClick.bind(this);
   }
 
   componentDidMount() {
@@ -47,16 +46,17 @@ class Grid extends React.Component {
 
     return grid;
   }
-  toggleAlive(row, col) {
+  toggleAlive(cell) {
     //toggle Cell from alive and not alive
-    let cell = this.state.grid[row][col];
+    // console.log(cell.pos)
+    // let cell = this.state.grid[row][col];
     (cell.isAlive ? cell.isAlive = false : cell.isAlive = true)
   }
   isWithinGrid(row, col) {
     //determines if Cell is within grid and returns bool
     return row >= 0 && row < this.props.size && col >= 0 && col < this.props.size * 2;
   }
-  allCells(fun) {
+  allCells() {
     // cycles through the grid and runs function
     for (let v = 0; v < this.props.size; v++) {
       for (let w = 0; w < this.props.size * 2; w++) {
@@ -135,11 +135,6 @@ class Grid extends React.Component {
     this.generate();
   }
 
-  handleCellClick(row, col) {
-    console.log("cellClicked: " + row + "," + col)
-    this.toggleAlive(row, col);
-  }
-
   render() {
 
     document.body.style.background = "#333";
@@ -161,16 +156,13 @@ class Grid extends React.Component {
       clear: 'both'
     };
 
-    let cells = [];
 
-    for (let i = 0; i < this.props.size; i++) {
-      let row = [];
-      for (let j = 0; j < this.props.size * 2; j++) {
-        let cell = this.state.grid[i][j];
-        row.push(<Cell key={i + "," + j} isAlive={cell.isAlive} row={i} col={j} parentMethod={this.handleCellClick} />);
-      }
-      cells.push(<div key={i} style={rowStyle}>{row}</div>);
-    }
+    let cells = this.state.grid.map((currRow,i)=>{
+      let row = currRow.map((currCell, j) => {
+        return <Cell key={j} isAlive={currCell.isAlive} cellObj={currCell} parentMethod={this.toggleAlive} />
+      })
+      return <div key={i} style={rowStyle}>{row}</div>
+    })
 
     return (
       <div className="container text-center">

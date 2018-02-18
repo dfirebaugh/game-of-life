@@ -13,7 +13,8 @@ class Cell extends React.Component{
   }
   handleClick(){
     this.setState({isAlive:!this.state.isAlive});
-    this.props.parentMethod(this.props.row, this.props.col);
+    this.props.parentMethod(this.props.cellObj);
+    console.log(`clicked Cell alive: ${this.props.cellObj.isAlive} pos: ${this.props.cellObj.pos.y}, ${this.props.cellObj.pos.x}`)
   }
   render(){
     var cellStyle = {

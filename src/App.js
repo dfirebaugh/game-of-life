@@ -16,15 +16,7 @@ class App extends React.Component {
     return (
       <div className="App">
 
-      <div className='inforContainer'>
-        <h4>Grid Height</h4>
-        <input type='text' id='gridSize' name='size' defaultValue={this.state.size}>
-        </input>
-        <div className='btn' type='submit' name='submit' onClick={this.handleSubmit}>
-          submit
-        </div>
 
-      </div>
       <Grid size={this.state.size} />
       </div>
     );
