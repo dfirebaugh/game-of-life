@@ -3,9 +3,9 @@ import React from 'react';
 class Cell extends React.Component{
   constructor(props){
     super(props);
-    this.state = {isAlive:null}
+    this.state = {isAlive:null};
 
-    this.handleClick = this.handleClick.bind(this)
+    this.handleClick = this.handleClick.bind(this);
   }
   componentWillMount(){
     this.setState({isAlive: this.props.isAlive});
@@ -25,7 +25,7 @@ class Cell extends React.Component{
 			float: "left",
 			border: "1px solid #000",
 			background: this.state.isAlive ? "#FFF" : "#333"
-    }
+    };
 
     return (
 			<div onClick={this.handleClick} style={cellStyle}></div>

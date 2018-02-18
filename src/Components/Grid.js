@@ -158,8 +158,9 @@ class Grid  extends React.Component{
 
 		return (
 			<div className="container text-center">
-      <Generation gen={this.state.generation}/>
-      <Buttons handleClickGen={this.handleClickGen} handleClickPause={this.handleClickPause} clear={this.clear} paused={this.state.paused}/>
+        <Generation gen={this.state.generation}/>
+        <Buttons handleClickGen={this.handleClickGen}
+            handleClickPause={this.handleClickPause} clear={this.clear} paused={this.state.paused}/>
 
 				<div style={gridStyle}>
 					{cells}
