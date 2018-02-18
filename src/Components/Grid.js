@@ -6,14 +6,15 @@ import Buttons from './Buttons.js';
 class Grid extends React.Component {
   constructor() {
     super();
-    this.state = { generation: 0, grid: [], toggle: false, paused: true }
+    this.state = { generation: 0, grid: [], toggle: false, paused: true };
 
-    this.populateGrid = this.populateGrid.bind(this)
-    this.clear = this.clear.bind(this)
-    this.generate = this.generate.bind(this)
-    this.handleClickGen = this.handleClickGen.bind(this)
-    this.handleClickPause = this.handleClickPause.bind(this)
-    this.handleCellClick = this.handleCellClick.bind(this)
+    this.populateGrid = this.populateGrid.bind(this);
+    this.clear = this.clear.bind(this);
+    this.generate = this.generate.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+    this.handleClickGen = this.handleClickGen.bind(this);
+    this.handleClickPause = this.handleClickPause.bind(this);
+    this.handleCellClick = this.handleCellClick.bind(this);
   }
 
   componentDidMount() {
@@ -35,24 +36,24 @@ class Grid extends React.Component {
     this.setState({ grid: this.populateGrid(this.props.size, Cell) });
   }
   populateGrid(size, obj) {
+    //adds new Cell objects into the the 2d array then returns that array
     let arr = Array.apply(null, Array(size)).map((currY, y) => Array.apply(null, Array(size * 2)).map((currX, x) => Object.create(obj).init({ x, y })))
     console.log(arr)
     return arr;
   }
-  clear() {
-    console.log(this.state.grid)
-    this.state.grid.map((col, y) => col.map((row, x) => {
-      let cell = this.state.grid[y][x];
-      cell.isAlive = false;
-    }))
+  clear(grid) {
+    // Makes all Cells dead -- isAlive = false -- returns grid
+    grid.map((col, y) => col.map((row, x) => grid[y][x].isAlive = false))
 
-    this.renderGrid()
+    return grid;
   }
-  updateCellState(row, col) {
+  toggleAlive(row, col) {
+    //toggle Cell from alive and not alive
     let cell = this.state.grid[row][col];
     (cell.isAlive ? cell.isAlive = false : cell.isAlive = true)
   }
   isWithinGrid(row, col) {
+    //determines if Cell is within grid and returns bool
     return row >= 0 && row < this.props.size && col >= 0 && col < this.props.size * 2;
   }
   allCells(fun) {
@@ -85,16 +86,10 @@ class Grid extends React.Component {
       }
     }
   }
-  renderGrid(){
-    //this forces the state to change which causes a rerender
-
-    if(this.state.toggle ? this.setState({toggle:true}) : this.setState({toggle:false}));
-}
   getNeighbors(row, col) {
     //takes coords and returns how many neighbors
     let neighborCells = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]];
     //gets the total of alive neighbors for a cell
-    let cell = this.state.grid[row][col];
     let neighbors = 0
     neighborCells.map((neighbor) => {
       let r = row + neighbor[0];
@@ -104,6 +99,7 @@ class Grid extends React.Component {
           neighbors++;
         }
       }
+      return neighbors;
     })
     // console.log(neighbors)
     return neighbors
@@ -114,7 +110,14 @@ class Grid extends React.Component {
     this.updateAllCells();
     this.setState({ generation: gen + 1 })
   }
+
+  // Event Handlers below
+  handleClear(){
+    this.setState({grid: this.clear(this.state.grid)})
+  }
+
   handleClickPause() {
+    //Toggles between paused and not paused
     (this.state.paused ? this.setState({ paused: false }) : this.setState({ paused: true }))
 
     let loop = setInterval(function () {
@@ -126,13 +129,17 @@ class Grid extends React.Component {
     }.bind(this), 1)
 
   }
+
   handleClickGen() {
+    // goes through one generation
     this.generate();
   }
+
   handleCellClick(row, col) {
     console.log("cellClicked: " + row + "," + col)
-    this.updateCellState(row, col);
+    this.toggleAlive(row, col);
   }
+
   render() {
 
     document.body.style.background = "#333";
@@ -168,7 +175,7 @@ class Grid extends React.Component {
     return (
       <div className="container text-center">
         <Generation gen={this.state.generation} />
-        <Buttons handleClickGen={this.handleClickGen} handleClickPause={this.handleClickPause} clear={this.clear} paused={this.state.paused} />
+        <Buttons handleClickGen={this.handleClickGen} handleClickPause={this.handleClickPause} clear={this.handleClear} paused={this.state.paused} />
 
         <div style={gridStyle}>
           {cells}
