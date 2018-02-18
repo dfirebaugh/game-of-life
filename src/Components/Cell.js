@@ -26,8 +26,8 @@ class Cell extends React.Component{
     };
 
     return (
-			<div onClick={this.handleClick} style={cellStyle}></div>
-		);
+      <div onClick={this.handleClick} style={cellStyle}></div>
+    );
   }
 }
 

@@ -43,7 +43,7 @@ class Grid extends React.Component {
   }
   clear(grid) {
     // Makes all Cells dead -- isAlive = false -- returns grid
-    grid.map((col, y) => col.map((row, x) => grid[y][x].isAlive = false))
+    grid.map((col, y) => col.map((currCell, x) => currCell.isAlive = false))
 
     return grid;
   }
