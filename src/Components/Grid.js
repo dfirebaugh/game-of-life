@@ -8,9 +8,6 @@ class Grid extends React.Component {
     super();
     this.state = { generation: 0, grid: [], toggle: false, paused: true };
 
-    this.populateGrid = this.populateGrid.bind(this);
-    this.clear = this.clear.bind(this);
-    this.generate = this.generate.bind(this);
     this.getNeighbors = this.getNeighbors.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleClickGen = this.handleClickGen.bind(this);
@@ -85,8 +82,10 @@ class Grid extends React.Component {
 
   getNeighbors(cell, grid) {
     //takes coords and returns how many neighbors
-    let neighborCells = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]];
     //gets the total of alive neighbors for a cell
+    
+    let neighborCells = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]];
+
     let neighbors = 0
 
     neighborCells.map((neighbor) => {
