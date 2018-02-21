@@ -6,7 +6,7 @@ import Buttons from './Buttons.js';
 class Grid extends React.Component {
   constructor() {
     super();
-    this.state = { generation: 0, grid: [], toggle: false, paused: true };
+    this.state = { generation: 0, grid: [], paused: true };
 
     this.getNeighbors = this.getNeighbors.bind(this);
     this.handleClear = this.handleClear.bind(this);
@@ -36,35 +36,40 @@ class Grid extends React.Component {
 
   populateGrid(size, obj) {
     //adds new Cell objects into the the 2d array then returns that array
-    let arr = Array.apply(null, Array(size)).map((currY, y) => Array.apply(null, Array(size * 2)).map((currX, x) => Object.create(obj).init({ x, y })))
+
+    let arr = Array.apply(null, Array(size)).map((currY, y) =>
+      Array.apply(null, Array(size * 2)).map((currX, x) =>
+        obj.init({ x, y })
+      )
+    );
     // console.log(arr)
     return arr;
   }
 
-  eachCell(grid, fn){
-    //iterates through the 2d array and runs a function on each cell
-    return  grid.map((row)=>row.map((cell)=>fn(cell, grid)))
-  }
+  //iterates through the 2d array and runs a function on each cell
+  eachCell = (grid, fn) => grid.forEach(row=>row.forEach(cell=>fn(cell, grid)));
+
+  //toggle Cell from alive and not alive
+  toggleAlive = cell => cell.isAlive = !cell.isAlive;
 
   clear(grid) {
     // Makes all Cells dead -- isAlive = false -- returns grid
-    grid.map((col, y) => col.map((currCell, x) => currCell.isAlive = false))
+    this.eachCell(grid, (c) => {
+      c.isAlive = false
+    })
 
     return grid;
   }
 
-  toggleAlive(cell) {
-    //toggle Cell from alive and not alive
-
-    (cell.isAlive ? cell.isAlive = false : cell.isAlive = true)
-  }
-
   isWithinGrid(row, col) {
     //determines if Cell is within grid and returns bool
-    return row >= 0 && row < this.props.size && col >= 0 && col < this.props.size * 2;
+    return row >= 0
+      && row < this.props.size
+      && col >= 0
+      && col < this.props.size * 2;
   }
 
-  gameLogic(cell){
+  gameLogic (cell){
     if (cell.isAlive) {
       if (cell.neighbors < 2) {
         return cell.isAlive = false;
@@ -83,8 +88,13 @@ class Grid extends React.Component {
   getNeighbors(cell, grid) {
     //takes coords and returns how many neighbors
     //gets the total of alive neighbors for a cell
-    
-    let neighborCells = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]];
+
+    let neighborCells = [
+      [-1, 0], [-1, 1],
+      [1, 0], [1, -1],
+      [0, -1], [-1, -1],
+      [0, 1], [1, 1]
+    ];
 
     let neighbors = 0
 
@@ -99,7 +109,7 @@ class Grid extends React.Component {
       }
       return neighbors;
     })
-    // console.log(neighbors)
+
     return cell.neighbors = neighbors;
   }
 
@@ -121,15 +131,15 @@ class Grid extends React.Component {
 
   handleClickPause() {
     //Toggles between paused and not paused
-    (this.state.paused ? this.setState({ paused: false }) : this.setState({ paused: true }))
+    this.setState({ paused: !this.state.paused })
 
-    let loop = setInterval(function () {
+    let loop = setInterval(() => {
       if (this.state.paused) {
         clearInterval(loop)
       } else {
         this.generate()
       }
-    }.bind(this), 1)
+    }, 1)
 
   }
 
@@ -139,7 +149,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    // this.eachCell(this.state.grid, console.log)
+
     document.body.style.background = "#333";
     document.body.style.color = "#FAFAFA";
 
