@@ -8,16 +8,20 @@ class App extends React.Component {
     this.state = {size:35};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleSubmit(e){
+
+  componentWillMount = () => {
+    document.body.style.background = "#444";
+    document.body.style.color = "#FAFAFA";
+  }
+
+  handleSubmit = e => {
     this.setState({size:document.getElementById('gridSize').value});
   }
-  render() {
-    // <h2> Game of Life with ReactJS</h2>
+  
+  render = () => {
     return (
       <div className="App">
-
-
-      <Grid size={this.state.size} />
+        <Grid size={this.state.size} />
       </div>
     );
   }

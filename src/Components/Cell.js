@@ -17,17 +17,8 @@ class Cell extends React.Component{
     console.log(`clicked Cell alive: ${this.props.cellObj.isAlive} pos: ${this.props.cellObj.pos.y}, ${this.props.cellObj.pos.x}`)
   }
   render(){
-    var cellStyle = {
-      width: 12,
-      height: 12,
-      dislay: "inline-block",
-      float: "left",
-      border: "1px solid #000",
-      background: this.state.isAlive ? "#FFF" : "#333"
-    };
-
     return (
-      <div onClick={this.handleClick} style={cellStyle}></div>
+      <div onClick={this.handleClick} className="cStyle" style={{background: this.state.isAlive ? "#FFF" : "#333"}}></div>
     );
   }
 }

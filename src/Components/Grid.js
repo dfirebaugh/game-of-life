@@ -3,6 +3,8 @@ import Cell from './Cell.js';
 import Generation from './Generation.js';
 import Buttons from './Buttons.js';
 
+
+
 class Grid extends React.Component {
   constructor() {
     super();
@@ -14,11 +16,11 @@ class Grid extends React.Component {
     this.handleClickPause = this.handleClickPause.bind(this);
   }
 
-  componentDidMount() {
-    // this.handleClickPause();
+  componentDidMount = () => {
+    this.handleClickPause();
   }
 
-  componentWillMount() {
+  componentWillMount = () => {
     let Cell = {
       init(pos) {
         let newCell = Object.create(this);
@@ -34,15 +36,14 @@ class Grid extends React.Component {
     this.setState({ grid: this.populateGrid(this.props.size, Cell) });
   }
 
-  populateGrid(size, obj) {
-    //adds new Cell objects into the the 2d array then returns that array
+  //adds new Cell objects into the the 2d array then returns that array
+  populateGrid = (size, obj) => {
 
     let arr = Array.apply(null, Array(size)).map((currY, y) =>
       Array.apply(null, Array(size * 2)).map((currX, x) =>
         obj.init({ x, y })
       )
     );
-    // console.log(arr)
     return arr;
   }
 
@@ -52,8 +53,8 @@ class Grid extends React.Component {
   //toggle Cell from alive and not alive
   toggleAlive = cell => cell.isAlive = !cell.isAlive;
 
-  clear(grid) {
-    // Makes all Cells dead -- isAlive = false -- returns grid
+  // Makes all Cells dead -- isAlive = false -- returns grid
+  clear = grid => {
     this.eachCell(grid, (c) => {
       c.isAlive = false
     })
@@ -61,15 +62,15 @@ class Grid extends React.Component {
     return grid;
   }
 
-  isWithinGrid(row, col) {
-    //determines if Cell is within grid and returns bool
+  //determines if Cell is within grid and returns bool
+  isWithinGrid = (row, col) => {
     return row >= 0
       && row < this.props.size
       && col >= 0
       && col < this.props.size * 2;
   }
 
-  gameLogic (cell){
+  gameLogic = cell => {
     if (cell.isAlive) {
       if (cell.neighbors < 2) {
         return cell.isAlive = false;
@@ -85,9 +86,8 @@ class Grid extends React.Component {
     }
   }
 
-  getNeighbors(cell, grid) {
-    //takes coords and returns how many neighbors
-    //gets the total of alive neighbors for a cell
+  //takes coords and returns total of alive neighbors for a cell
+  getNeighbors = (cell, grid) => {
 
     let neighborCells = [
       [-1, 0], [-1, 1],
@@ -113,7 +113,7 @@ class Grid extends React.Component {
     return cell.neighbors = neighbors;
   }
 
-  generate() {
+  generate = () => {
     let gen = this.state.generation
 
     //run getNeighbors on each cell
@@ -125,12 +125,12 @@ class Grid extends React.Component {
   }
 
   // Event Handlers below
-  handleClear(){
+  handleClear = () => {
     this.setState({grid: this.clear(this.state.grid)})
   }
 
+  //Toggles between paused and not paused
   handleClickPause() {
-    //Toggles between paused and not paused
     this.setState({ paused: !this.state.paused })
 
     let loop = setInterval(() => {
@@ -143,53 +143,52 @@ class Grid extends React.Component {
 
   }
 
+  // goes through one generation
   handleClickGen() {
-    // goes through one generation
     this.generate();
   }
 
-  render() {
-
-    document.body.style.background = "#333";
-    document.body.style.color = "#FAFAFA";
-
-    let gridStyle = {
-      position: 'relative',
-      display: 'inline-block',
-      margin: '0 auto',
-      border: '4px solid red',
-      marginTop: 30,
-      WebKitBoxShadow: "0 0 5px rgba(0, 0, 0, 1)",
-      MozBoxShadow: "0 0 5px rgba(0, 0, 0, 1)",
-      boxShadow: "0 0 5px rgba(0, 0, 0, 1)"
-    };
-    let rowStyle = {
-      display: 'flex',
-      float: 'left',
-      clear: 'both'
-    };
-
-    //populates the cells array with Cell Components
-    let cells = this.state.grid.map((currRow,i)=>{
+  //populates the cells array with Cell Components
+  cellComponents = (grid) => {
+    let cells = grid.map((currRow,i)=>{
       let row = currRow.map((currCell, j) => {
         return <Cell key={j} isAlive={currCell.isAlive} cellObj={currCell} parentMethod={this.toggleAlive} />
       })
       return <div key={i} style={rowStyle}>{row}</div>
     })
+    return cells
+  }
 
+  render() {
     return (
       <div className="container text-center">
         <Generation gen={this.state.generation} />
         <Buttons handleClickGen={this.handleClickGen} handleClickPause={this.handleClickPause} clear={this.handleClear} paused={this.state.paused} />
 
         <div style={gridStyle}>
-          {cells}
+          {this.cellComponents(this.state.grid)}
         </div>
       </div>
     );
   }
 }
 
+//styles for this component
+const gridStyle = {
+  position: 'relative',
+  display: 'inline-block',
+  margin: '0 auto',
+  border: '4px solid red',
+  marginTop: 30,
+  WebKitBoxShadow: "0 0 5px rgba(0, 0, 0, 1)",
+  MozBoxShadow: "0 0 5px rgba(0, 0, 0, 1)",
+  boxShadow: "0 0 5px rgba(0, 0, 0, 1)"
+};
+const rowStyle = {
+  display: 'flex',
+  float: 'left',
+  clear: 'both'
+};
 
 
 export default Grid;
