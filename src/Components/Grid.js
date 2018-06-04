@@ -1,19 +1,14 @@
 import React from 'react';
 import Cell from './Cell.js';
-import Generation from './Generation.js';
 import Buttons from './Buttons.js';
 
 
+const Generation = (props) => <h4> Generation: {props.gen}</h4>
 
 class Grid extends React.Component {
   constructor() {
     super();
-    this.state = { generation: 0, grid: [], paused: true };
-
-    this.getNeighbors = this.getNeighbors.bind(this);
-    this.handleClear = this.handleClear.bind(this);
-    this.handleClickGen = this.handleClickGen.bind(this);
-    this.handleClickPause = this.handleClickPause.bind(this);
+    this.state = { generation: 0, grid: [], paused: true, toggle: false };
   }
 
   componentDidMount = () => {
@@ -21,7 +16,8 @@ class Grid extends React.Component {
   }
 
   componentWillMount = () => {
-    let Cell = {
+    //Cell Factory
+    const Cell = {
       init(pos) {
         let newCell = Object.create(this);
         newCell.isAlive = Math.random() > .53;
@@ -51,38 +47,34 @@ class Grid extends React.Component {
   eachCell = (grid, fn) => grid.forEach(row=>row.forEach(cell=>fn(cell, grid)));
 
   //toggle Cell from alive and not alive
-  toggleAlive = cell => cell.isAlive = !cell.isAlive;
+  toggleAlive = cell => {
+    this.setState({toggle: !this.state.toggle});
+    return cell.isAlive = !cell.isAlive
+  };
 
   // Makes all Cells dead -- isAlive = false -- returns grid
   clear = grid => {
-    this.eachCell(grid, (c) => {
-      c.isAlive = false
-    })
-
+    this.eachCell(grid, c => c.isAlive = false)
     return grid;
   }
 
   //determines if Cell is within grid and returns bool
   isWithinGrid = (row, col) => {
     return row >= 0
-      && row < this.props.size
-      && col >= 0
-      && col < this.props.size * 2;
+            && row < this.props.size
+            && col >= 0
+            && col < this.props.size * 2;
   }
 
   gameLogic = cell => {
+    
     if (cell.isAlive) {
-      if (cell.neighbors < 2) {
-        return cell.isAlive = false;
-      }
-      if (cell.neighbors > 3) {
+      if (cell.neighbors < 2 || cell.neighbors > 3) {
         return cell.isAlive = false;
       }
     }
-    else {
-      if (cell.neighbors === 3) {
-        return cell.isAlive = true;
-      }
+    else if(cell.neighbors === 3) {
+      return cell.isAlive = true;
     }
   }
 
@@ -102,11 +94,8 @@ class Grid extends React.Component {
       let r = cell.pos.y + neighbor[0];
       let c = cell.pos.x + neighbor[1];
 
-      if (this.isWithinGrid(r, c)) {
-      if (grid[r][c].isAlive) {
-          neighbors++;
-        }
-      }
+      if(this.isWithinGrid(r,c) && grid[r][c].isAlive) neighbors++;
+      
       return neighbors;
     })
 
@@ -130,7 +119,7 @@ class Grid extends React.Component {
   }
 
   //Toggles between paused and not paused
-  handleClickPause() {
+  handleClickPause = () =>  {
     this.setState({ paused: !this.state.paused })
 
     let loop = setInterval(() => {
@@ -144,7 +133,7 @@ class Grid extends React.Component {
   }
 
   // goes through one generation
-  handleClickGen() {
+  handleClickGen = () => {
     this.generate();
   }
 
