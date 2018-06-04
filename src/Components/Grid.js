@@ -128,7 +128,7 @@ class Grid extends React.Component {
       } else {
         this.generate()
       }
-    }, 1)
+    }, 500)
 
   }
 
